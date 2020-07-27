@@ -18,16 +18,18 @@ link = request.LAN("lan")
 
 for i in range(2):
   if i == 0:
-    node = request.XenVM("webserver")    
+    node = request.XenVM("webserver")
+    node.routable_control_ip = "true"  
+  
   else:
     node = request.XenVM("observer")
    
-  node.routable_control_ip = "true"  
   node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
   iface = node.addInterface("if" + str(i))
   iface.component_id = "eth1"
   iface.addAddress(pg.IPv4Address(prefixForIP + str(i + 1), "255.255.255.0"))
   link.addInterface(iface)
+  
   
 # Print the RSpec to the enclosing page.
 pc.printRequestRSpec(request)
